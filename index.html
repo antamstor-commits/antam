@@ -36,11 +36,6 @@ header {
     gap: 8px;
 }
 
-.logo img {
-    width: 25px;
-    height: 25px;
-}
-
 .cart {
     position: relative;
     font-size: 20px;
@@ -65,14 +60,6 @@ header {
     border-radius: 8px;
 }
 
-/* BANNER */
-.banner {
-    height: 120px;
-    background: url('img/banner.jpg') center/cover;
-    margin: 8px;
-    border-radius: 10px;
-}
-
 /* PRODUK */
 .container {
     padding: 8px;
@@ -88,6 +75,7 @@ header {
     background: white;
     padding: 8px;
     border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .product-card img {
@@ -146,7 +134,6 @@ header {
 <header>
     <div class="top-bar">
         <div class="logo">
-            <img src="img/logo.png">
             Toko Emas Antam
         </div>
 
@@ -161,8 +148,6 @@ header {
     </div>
 </header>
 
-<div class="banner"></div>
-
 <div class="container">
     <div class="product-grid" id="product-list"></div>
 </div>
@@ -176,15 +161,15 @@ header {
 
 <script>
 const produk = [
- {nama:"Emas 0.5 Gram",harga:650000,img:"img/emas-05g.jpg"},
- {nama:"Emas 1 Gram",harga:1200000,img:"img/emas-1g.jpg"},
- {nama:"Emas 2 Gram",harga:2350000,img:"img/emas-2g.jpg"},
- {nama:"Emas 3 Gram",harga:3450000,img:"img/emas-3g.jpg"},
- {nama:"Emas 5 Gram",harga:5800000,img:"img/emas-5g.jpg"},
- {nama:"Emas 10 Gram",harga:11500000,img:"img/emas-10g.jpg"},
- {nama:"Emas 25 Gram",harga:28500000,img:"img/emas-25g.jpg"},
- {nama:"Emas 50 Gram",harga:56800000,img:"img/emas-50g.jpg"},
- {nama:"Emas 100 Gram",harga:113000000,img:"img/emas-100g.jpg"}
+ {nama:"Emas 0.5 Gram",harga:650000,img:"antam/emas-05g.jpg"},
+ {nama:"Emas 1 Gram",harga:1200000,img:"antam/emas-1g.jpg"},
+ {nama:"Emas 2 Gram",harga:2350000,img:"antam/emas-2g.jpg"},
+ {nama:"Emas 3 Gram",harga:3450000,img:"antam/emas-3g.jpg"},
+ {nama:"Emas 5 Gram",harga:5800000,img:"antam/emas-5g.jpg"},
+ {nama:"Emas 10 Gram",harga:11500000,img:"antam/emas-10g.jpg"},
+ {nama:"Emas 25 Gram",harga:28500000,img:"antam/emas-25g.jpg"},
+ {nama:"Emas 50 Gram",harga:56800000,img:"antam/emas-50g.jpg"},
+ {nama:"Emas 100 Gram",harga:113000000,img:"antam/emas-100g.jpg"}
 ];
 
 let cart = [];
@@ -199,7 +184,7 @@ function tampilkanProduk(list){
             <img src="${p.img}">
             <div class="product-name">${p.nama}</div>
             <div class="rating">⭐ 4.9 | Terjual 100+</div>
-            <div class="price">Rp ${p.harga.toLocaleString()}</div>
+            <div class="price">Rp ${p.harga.toLocaleString("id-ID")}</div>
             <button class="buy-btn" onclick="beli('${p.nama}',${p.harga})">Beli</button>
         </div>`;
     });
@@ -223,7 +208,7 @@ function updateCart(){
         list.innerHTML += `<li>${item.nama}</li>`;
     });
 
-    totalEl.innerText = total.toLocaleString();
+    totalEl.innerText = total.toLocaleString("id-ID");
     countEl.innerText = cart.length;
 }
 
