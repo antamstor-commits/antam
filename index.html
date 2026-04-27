@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toko Emas Antam</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f5f5f5;
+}
+
+/* HEADER */
+header {
+    background: #ee4d2d;
+    color: white;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo img {
+    width: 25px;
+    height: 25px;
+}
+
+.cart {
+    position: relative;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background: yellow;
+    color: black;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 10px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+}
+
+/* BANNER */
+.banner {
+    height: 120px;
+    background: url('img/banner.jpg') center/cover;
+    margin: 8px;
+    border-radius: 10px;
+}
+
+/* PRODUK */
+.container {
+    padding: 8px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.product-card {
+    background: white;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.product-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-name {
+    font-size: 13px;
+    margin: 4px 0;
+}
+
+.rating {
+    font-size: 11px;
+    color: gray;
+}
+
+.price {
+    color: #ee4d2d;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.buy-btn {
+    margin-top: 5px;
+    padding: 8px;
+    width: 100%;
+    border: none;
+    background: #ee4d2d;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* CART */
+.cart-box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    max-height: 50%;
+    overflow: auto;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 10px;
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="top-bar">
+        <div class="logo">
+            <img src="img/logo.png">
+            Toko Emas Antam
+        </div>
+
+        <div class="cart" onclick="toggleCart()">
+            🛒
+            <span class="cart-count" id="cart-count">0</span>
+        </div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Cari emas..." onkeyup="searchProduk()">
+    </div>
+</header>
+
+<div class="banner"></div>
+
+<div class="container">
+    <div class="product-grid" id="product-list"></div>
+</div>
+
+<div class="cart-box" id="cart-box">
+    <h4>Keranjang</h4>
+    <ul id="cart-items"></ul>
+    <hr>
+    <b>Total: Rp <span id="total">0</span></b>
+</div>
+
+<script>
+const produk = [
+ {nama:"Emas 0.5 Gram",harga:650000,img:"img/emas-05g.jpg"},
+ {nama:"Emas 1 Gram",harga:1200000,img:"img/emas-1g.jpg"},
+ {nama:"Emas 2 Gram",harga:2350000,img:"img/emas-2g.jpg"},
+ {nama:"Emas 3 Gram",harga:3450000,img:"img/emas-3g.jpg"},
+ {nama:"Emas 5 Gram",harga:5800000,img:"img/emas-5g.jpg"},
+ {nama:"Emas 10 Gram",harga:11500000,img:"img/emas-10g.jpg"},
+ {nama:"Emas 25 Gram",harga:28500000,img:"img/emas-25g.jpg"},
+ {nama:"Emas 50 Gram",harga:56800000,img:"img/emas-50g.jpg"},
+ {nama:"Emas 100 Gram",harga:113000000,img:"img/emas-100g.jpg"}
+];
+
+let cart = [];
+
+function tampilkanProduk(list){
+    const container = document.getElementById("product-list");
+    container.innerHTML = "";
+
+    list.forEach(p=>{
+        container.innerHTML += `
+        <div class="product-card">
+            <img src="${p.img}">
+            <div class="product-name">${p.nama}</div>
+            <div class="rating">⭐ 4.9 | Terjual 100+</div>
+            <div class="price">Rp ${p.harga.toLocaleString()}</div>
+            <button class="buy-btn" onclick="beli('${p.nama}',${p.harga})">Beli</button>
+        </div>`;
+    });
+}
+
+function beli(nama,harga){
+    cart.push({nama,harga});
+    updateCart();
+}
+
+function updateCart(){
+    const list = document.getElementById("cart-items");
+    const totalEl = document.getElementById("total");
+    const countEl = document.getElementById("cart-count");
+
+    list.innerHTML = "";
+    let total = 0;
+
+    cart.forEach(item=>{
+        total += item.harga;
+        list.innerHTML += `<li>${item.nama}</li>`;
+    });
+
+    totalEl.innerText = total.toLocaleString();
+    countEl.innerText = cart.length;
+}
+
+function toggleCart(){
+    const box = document.getElementById("cart-box");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function searchProduk(){
+    const keyword = document.getElementById("search").value.toLowerCase();
+    const hasil = produk.filter(p=>p.nama.toLowerCase().includes(keyword));
+    tampilkanProduk(hasil);
+}
+
+tampilkanProduk(produk);
+</script>
+
+</body>
+</html>
